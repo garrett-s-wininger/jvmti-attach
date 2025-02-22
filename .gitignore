@@ -1,0 +1,10 @@
+# CMake
+CMakeFiles/
+CMakeCache.txt
+CMakeUserPresets.json
+Makefile
+cmake_install.cmake
+
+# LSP
+.cache/
+compile_commands.json
