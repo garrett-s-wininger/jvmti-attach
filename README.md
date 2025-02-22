@@ -33,7 +33,7 @@ file described in CMake's
 
 ## Execution
 
-Simply run `attachment/jvm-ti` after the build is complete to be presented with a
+Simply run `attachment/jvmti-attach` after the build is complete to be presented with a
 listing of currently running JVM processes on the system. Upon selecting a PID to
 monitor, the application will attempt to attach to the remote JVM and perform
 it's monitoring/interrogation tasks.
