@@ -45,29 +45,37 @@ pid_t select_proc_to_monitor(std::vector<pid_t>& proc_list) {
 }
 
 int main(int argc, char** argv) {
-  // Get Java process listing
-  auto proc_list = snapshot_java_procs();
+  try {
+    // Get Java process listing
+    auto proc_list = snapshot_java_procs();
 
-  // Abort if no processes found
-  if (proc_list.empty()) {
-    std::println("No Java processes found.");
-    exit(EXIT_SUCCESS);
+    // Abort if no processes found
+    if (proc_list.empty()) {
+      std::println("No Java processes found.");
+      exit(EXIT_SUCCESS);
+    }
+
+    // Get choice for monitoring selection
+    pid_t proc_to_monitor;
+
+    if (proc_list.size() == 1) {
+      proc_to_monitor = proc_list.at(0);
+    } else {
+      proc_to_monitor = select_proc_to_monitor(proc_list);
+    }
+
+    std::println("Selected PID: {0}", proc_to_monitor);
+
+    // Attach to the remote JVM
+    JvmAttachment driver = JvmAttachment();
+    driver.attach(proc_to_monitor);
+    driver.load_agent("<TODO>"); // TODO(Garrett): Parse user input for lib
+    driver.detach();
+  } catch (const std::runtime_error& e) {
+    std::println("\nError:\n");
+    std::cerr << e.what() << std::endl;
+    exit(EXIT_FAILURE);
   }
-
-  // Get choice for monitoring selection
-  pid_t proc_to_monitor;
-
-  if (proc_list.size() == 1) {
-    proc_to_monitor = proc_list.at(0);
-  } else {
-    proc_to_monitor = select_proc_to_monitor(proc_list);
-  }
-
-  std::println("Selected PID: {0}", proc_to_monitor);
-
-  // Attach to the remote JVM
-  JvmAttachment driver_process = JvmAttachment();
-  driver_process.attach_to_remote(proc_to_monitor);
 
   return 0;
 }
