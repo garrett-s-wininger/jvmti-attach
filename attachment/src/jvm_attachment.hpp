@@ -1,3 +1,6 @@
+#ifndef _JVM_ATTACHMENT_H_
+#define _JVM_ATTACHMENT_H_
+
 #include <string_view>
 
 #include <jni.h>
@@ -110,3 +113,5 @@ public:
    */
   void load_agent(std::string_view) const;  
 };
+
+#endif // _JVM_ATTACHMENT_H_
