@@ -5,6 +5,17 @@
 
 #ifdef __MACH__
 #include "arch/darwin.hpp"
+#else
+/**
+ * A fallback implementation returning an empty list of processes for systems
+ * who's checks cannot be included at compile time.
+ *
+ * @return empty vector of process identifiers
+ */
+std::vector<pid_t> snapshot_java_procs() {
+  std::println("[WARN] Process enumeration is not supported on this system");
+  return std::vector<pid_t>();
+}
 #endif
 
 #include "jvm_attachment.hpp"
@@ -20,7 +31,7 @@ struct ProgramArgs {
 
   /**
    * PID to attach to.
-   */
+  */
   pid_t monitor_pid;  
 };
 
